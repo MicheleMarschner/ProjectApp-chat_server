@@ -1,11 +1,11 @@
-import express from 'express';
-const router = express.Router();
 
 
-router.use('/', (req, res, next) => {
-    console.log("server")
 
-    const io = req.app.get('socketio');
+
+
+module.exports = (io) => {
+  console.log('IO: ', io);
+    /*const io = req.app.get('socketio');*/
 
     io.on("connection", (socket) => {
         console.log(socket.id);
@@ -22,7 +22,6 @@ router.use('/', (req, res, next) => {
         })
       
       });
-}) 
+}
 
 
-export default router;

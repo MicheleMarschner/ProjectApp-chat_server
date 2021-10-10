@@ -21,7 +21,6 @@ const messageForm = document.querySelector('#messageForm');
 const socketButton = document.querySelector('#socketButton');
 
 socketButton.onclick = function(e) {
-  console.log("hi")
   init();
 }
 // Event handler when the client enters a message
@@ -37,23 +36,19 @@ messageForm.onsubmit = function(e) {
 }
 
 const init = () => {
-  socketClient = io(URL, {
-    path: '/chat/',
-    autoConnect: false,
-    
-}); //! Anpassung domain
+  socketClient = io(URL); //! Anpassung domain
 
   socketClient.on("connect", () => {
-      //console.log("socket client connected")
-      messageObj = {
-        type: "NEW_USER",
-        payload: { text: "A new User appeared", username}
-      }
-      socketClient.emit("newUser",  messageObj);
-    });
+    console.log("socket client connected")
+    messageObj = {
+      type: "NEW_USER",
+      payload: { text: "A new User appeared", username}
+    }
+    socketClient.emit("newUser",  messageObj);
+  });
 }
+//init();
 
-await init();
 
 
 socketClient.on("message", (data) => {
