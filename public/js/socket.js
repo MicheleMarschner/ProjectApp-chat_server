@@ -17,7 +17,13 @@ const username = prompt('enter a username');
 
 const messageBox = document.querySelector('#messageBox');
 const messageForm = document.querySelector('#messageForm');
-  
+
+const socketButton = document.querySelector('#socketButton');
+
+socketButton.onclick = function(e) {
+  console.log("hi")
+  init();
+}
 // Event handler when the client enters a message
 messageForm.onsubmit = function(e) {
   e.preventDefault();
@@ -31,7 +37,11 @@ messageForm.onsubmit = function(e) {
 }
 
 const init = () => {
-  socketClient = io(URL); //! Anpassung domain
+  socketClient = io(URL, {
+    path: '/chat/',
+    autoConnect: false,
+    
+}); //! Anpassung domain
 
   socketClient.on("connect", () => {
       //console.log("socket client connected")
@@ -77,6 +87,7 @@ function sendMessageToServer(message) {
   }
   socketClient.emit("newMessage",  messageObj);
 }
+
 
 ////////////////////////////////////////////////
     //////////// DOM HELPER FUNCTIONS //////////////
