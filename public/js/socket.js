@@ -47,9 +47,9 @@ await init();
 
 
 socketClient.on("message", (data) => {
-  const { type, payload } = data;
+  const { event, payload } = data;
   console.log(payload)
-  switch(type) {
+  switch(event) {
     case "NEW_USER":
       showMessageReceived('<em>A wild ' + payload.username + ' appeared!</em>')
       break;
@@ -73,10 +73,9 @@ function sendMessageToServer(message) {
   // Exercise 6: Send the message from the messageBox to the server
   // Exercise 9: Send the message in a custom message object with .type and .payload properties
   messageObj = {
-    type: "NEW_MESSAGE",
     payload: { text: message, username, time }
   }
-  socketClient.emit("message",  messageObj);
+  socketClient.emit("newMessage",  messageObj);
 }
 
 ////////////////////////////////////////////////
