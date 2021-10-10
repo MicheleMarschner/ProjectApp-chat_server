@@ -37,7 +37,7 @@ const init = () => {
       //console.log("socket client connected")
       messageObj = {
         type: "NEW_USER",
-        payload: { message: "A new User appeared", username}
+        payload: { text: "A new User appeared", username}
       }
       socketClient.emit("newUser",  messageObj);
     });
@@ -48,14 +48,13 @@ await init();
 
 socketClient.on("message", (data) => {
   const { type, payload } = data;
-
+  console.log(payload)
   switch(type) {
     case "NEW_USER":
       showMessageReceived('<em>A wild ' + payload.username + ' appeared!</em>')
       break;
-
     case "NEW_MESSAGE":
-      showMessageReceived(`<strong>[${payload.username}]</strong> ${payload.message}`);
+      showMessageReceived(`<strong>[${payload.username}]</strong> ${payload.text}`);
       break;
     default: 
       break;
@@ -69,13 +68,13 @@ function sendMessageToServer(message) {
     showMessageReceived('No WebSocket connection :(');
     return;
   }
-  
+  const time = new Date();
   // TODO: 
   // Exercise 6: Send the message from the messageBox to the server
   // Exercise 9: Send the message in a custom message object with .type and .payload properties
   messageObj = {
     type: "NEW_MESSAGE",
-    payload: { message, username }
+    payload: { text: message, username, time }
   }
   socketClient.emit("message",  messageObj);
 }
