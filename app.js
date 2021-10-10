@@ -19,12 +19,11 @@ const io = new Server(httpServer, {
     credentials: true,*/
   }
 });
-require('./router/chat.js')(io)
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-/*
+
 io.on("connection", (socket) => {
   console.log(`${socket.id} connected`);
   
@@ -92,9 +91,9 @@ io.on("connection", (socket) => {
     const event = "USER_DISCONNECTED"
     const msgObj = formatMessage(event, text, username);
     socket.broadcast.emit("???", msgObj);*/
-//   })
+   })
 
-//});
+});
 
 
 

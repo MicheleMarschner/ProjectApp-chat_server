@@ -18,11 +18,7 @@ const username = prompt('enter a username');
 const messageBox = document.querySelector('#messageBox');
 const messageForm = document.querySelector('#messageForm');
 
-const socketButton = document.querySelector('#socketButton');
 
-socketButton.onclick = function(e) {
-  init();
-}
 // Event handler when the client enters a message
 messageForm.onsubmit = function(e) {
   e.preventDefault();
@@ -47,7 +43,8 @@ const init = () => {
     socketClient.emit("newUser",  messageObj);
   });
 }
-//init();
+
+init();
 
 
 
@@ -58,7 +55,7 @@ socketClient.on("message", (data) => {
     case "NEW_USER":
       showMessageReceived('<em>A wild ' + payload.username + ' appeared!</em>')
       break;
-    case "NEW_MESSAGE":
+    case "NEW_CHAT_MESSAGE":
       showMessageReceived(`<strong>[${payload.username}]</strong> ${payload.text}`);
       break;
     default: 
