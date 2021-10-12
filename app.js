@@ -14,7 +14,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3334",
+    origin: "*" /*process.env.CLIENT_URL || "http://localhost:3334" || "http://localhost:3001"*/,
     /*methods: ["GET", "POST"],
     credentials: true,*/
   }
@@ -22,6 +22,7 @@ const io = new Server(httpServer, {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+const typingUsers = new Set();
 
 
 io.on("connection", (socket) => {
@@ -61,11 +62,22 @@ io.on("connection", (socket) => {
   })
 
   socket.on("isTyping", (data) => {
-    const { username } = data.payload;
-    const text = `${username} is typing`;
+    console.log("isTyping")
+    let { username, text } = data.payload;
+
+    if ( !typingUsers.has(socket.id) && text ) {
+      typingUsers.add(socket.id)
+    } 
+    else if ( typingUsers.has(socket.id) && !text ) {
+      typingUsers.delete(socket.id);
+    }
+
+    typingUsers.size > 0 ? text = true : text = false;  //noch nicht ganz fehlerfrei vom Gedanken bei mehreren Tippern
+    console.log(typingUsers)
+
     const event = "IS_TYPING"
     const msgObj = formatMessage(event, text, username);
-    socket.broadcast.emit("message", msgObj);
+    socket.broadcast.emit("isTyping", msgObj);
   })
 
   socket.on("leaveRoom", (data) => {
